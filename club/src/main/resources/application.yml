@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+---
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${dev_URL}
+    username: ${dev_username}
+    password: ${dev_password}
+
+---
+
+spring:
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${TEST_URL}
+    username: ${test_username}
+    password: ${test_username}
+
+---
+
+spring:
+  profiles:
+    active: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${PROD_URL}
+    username: ${prod_username}
+    password: ${prod_username}
