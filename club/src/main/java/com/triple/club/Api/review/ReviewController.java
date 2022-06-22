@@ -1,4 +1,4 @@
-package com.triple.club.controller.review;
+package com.triple.club.Api.review;
 
 import org.springframework.web.bind.annotation.RestController;
 
