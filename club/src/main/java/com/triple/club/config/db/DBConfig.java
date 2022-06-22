@@ -13,7 +13,10 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement    // * @Transactional only rolls back transactions for unchecked exceptions.
-@MapperScan(basePackages = {"com.triple.club.mapper.user"})
+@MapperScan(basePackages = {"com.triple.club.user.mapper",
+        "com.triple.club.event.mapper",
+        "com.triple.club.place.mapper",
+        "com.triple.club.review.mapper"})
 public class DBConfig {
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
