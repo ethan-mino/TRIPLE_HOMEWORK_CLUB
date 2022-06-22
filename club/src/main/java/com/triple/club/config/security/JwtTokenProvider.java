@@ -51,17 +51,20 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        return req.getHeader("X-AUTH-TOKEN");
+        return req.getHeader(securityProperties.getJwt().getHEADER_STRING());
     }
 
     // Jwt Token의 유효성 및 만료 기간 검사
     public boolean validateToken(String jwtToken) {
+        jwtToken.replace(securityProperties.getJwt().getTOKEN_PREFIX(), "");
+
         try {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(securityProperties.getJwt().getSecret())
                     .parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

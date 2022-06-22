@@ -1,9 +1,11 @@
 package com.triple.club.Api.user.controller;
 
 import com.triple.club.Api.Util.ApiResponse;
+import com.triple.club.Api.Util.ApiResult.ApiAuthResult;
 import com.triple.club.Api.Util.ApiResult.ApiBasicResult;
 import com.triple.club.Api.user.service.UserService;
 import com.triple.club.Api.user.vo.User;
+import com.triple.club.config.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -17,15 +19,32 @@ import javax.validation.Valid;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder){
+    public UserController(UserService userService,
+                          PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider){
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    private Boolean usernameDupValidation(String username){    // 아이디 중복 검사
-        User user = userService.selectUserByUsername(username);
-        return !(user == null);
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<String>> login(@RequestBody User user){
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+
+        String username = user.getUsername();
+        User queriedUser = userService.selectUserByUsername(username);
+
+        // 아이디 또는 비밀번호가 일치하지 않는 경우
+        if(queriedUser == null || !passwordEncoder.matches(user.getPassword(), queriedUser.getPassword())){
+            apiResponse.setResult(ApiAuthResult.ERR_INVALID_ACCOUNT);
+        }else{  // 아이디와 비밀번호가 일치하는 경우
+            String token = jwtTokenProvider.createToken(username);  // token 생성
+            apiResponse.setResult(ApiBasicResult.INF_SUCCESS);
+            apiResponse.setData(token);
+        }
+
+        return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("/signup") // 회원가입
@@ -36,8 +55,7 @@ public class UserController {
             apiResponse.setResult(ApiBasicResult.ERR_INVALID_VALUE);
         }else{
             String username = user.getUsername();
-            Boolean isUsernameDup = usernameDupValidation(username); // 아이디 중복 검사
-
+            Boolean isUsernameDup = userService.existsUser(username); // 아이디 중복 검사
 
             if(!isUsernameDup){  // 아이디가 중복되지 않은 경우
                 String password = user.getPassword();
