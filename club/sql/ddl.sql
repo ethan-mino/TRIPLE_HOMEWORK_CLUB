@@ -15,5 +15,6 @@ CREATE TABLE place (
       longitude VARCHAR(255) NOT NULL COMMENT '경도',
       created_at DATE NOT NULL COMMENT '생성 일자',
       updated_at DATE NOT NULL COMMENT '수정 일자',
-      PRIMARY KEY (id)
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
