@@ -12,17 +12,19 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User selectUserByUsername(String username){
         return userMapper.selectUserByUsername(username);
     }
 
-    public int createUser(User user){
-        return userMapper.createUser(user);
-    }
-
+    @Transactional(readOnly = true)
     public Boolean existsUser(String username){    // 아이디 중복 검사
         User user = userMapper.selectUserByUsername(username);
         return !(user == null);
+    }
+
+    @Transactional
+    public int createUser(User user){
+        return userMapper.createUser(user);
     }
 }
