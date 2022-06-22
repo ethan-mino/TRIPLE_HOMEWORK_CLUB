@@ -13,13 +13,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User selectUserByUsername(String username){
-        return userMapper.selectUserByUsername(username);
+    public User findUserByUsername(String username){
+        return userMapper.findUserByUsername(username);
     }
 
     @Transactional(readOnly = true)
     public Boolean existsUser(String username){    // 아이디 중복 검사
-        User user = userMapper.selectUserByUsername(username);
+        User user = userMapper.findUserByUsername(username);
         return !(user == null);
     }
 

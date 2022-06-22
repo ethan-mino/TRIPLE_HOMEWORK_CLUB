@@ -33,7 +33,7 @@ public class UserController {
         ApiResponse<String> apiResponse = new ApiResponse<>();
 
         String username = user.getUsername();
-        User queriedUser = userService.selectUserByUsername(username);
+        User queriedUser = userService.findUserByUsername(username);
 
         // 아이디 또는 비밀번호가 일치하지 않는 경우
         if(queriedUser == null || !passwordEncoder.matches(user.getPassword(), queriedUser.getPassword())){
@@ -65,7 +65,7 @@ public class UserController {
                 int createCnt = userService.createUser(user);
 
                 if(createCnt == 1){ // 계정이 생성된 경우
-                    User createdUser = userService.selectUserByUsername(username);
+                    User createdUser = userService.findUserByUsername(username);
                     apiResponse.setResult(ApiBasicResult.INF_SUCCESS);
                     apiResponse.setData(createdUser);
                 }else{  // 계정 생성에 실패한 경우
