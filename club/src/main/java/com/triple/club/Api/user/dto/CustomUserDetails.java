@@ -1,9 +1,6 @@
-package com.triple.club.controller.user.dto;
+package com.triple.club.Api.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +20,4 @@ public class CustomUserDetails implements UserDetails {
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private Collection<? extends GrantedAuthority> authorities;
-
-    public CustomUserDetails(){}
 }

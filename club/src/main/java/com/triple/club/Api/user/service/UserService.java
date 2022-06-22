@@ -1,7 +1,7 @@
-package com.triple.club.controller.user.service;
+package com.triple.club.Api.user.service;
 
-import com.triple.club.controller.user.mapper.UserMapper;
-import com.triple.club.controller.user.vo.User;
+import com.triple.club.Api.user.mapper.UserMapper;
+import com.triple.club.Api.user.vo.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +14,9 @@ public class UserService {
 
     @Transactional
     public User selectUserByUsername(String username){
-
-        return null;
+        return userMapper.selectUserByUsername(username);
+    }
+    public int createUser(User user){
+        return userMapper.createUser(user);
     }
 }
