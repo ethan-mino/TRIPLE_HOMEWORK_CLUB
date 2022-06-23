@@ -1,4 +1,4 @@
-package com.triple.club.Api.Util;
+package com.triple.club.Api.util;
 
 import lombok.Getter;
 import lombok.Setter;

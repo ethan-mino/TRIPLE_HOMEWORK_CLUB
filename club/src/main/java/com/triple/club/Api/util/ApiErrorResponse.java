@@ -1,4 +1,4 @@
-package com.triple.club.Api.Util;
+package com.triple.club.Api.util;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

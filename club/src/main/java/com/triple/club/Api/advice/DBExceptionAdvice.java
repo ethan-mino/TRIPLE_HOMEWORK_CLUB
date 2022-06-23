@@ -1,8 +1,8 @@
 package com.triple.club.Api.advice;
 
-import com.triple.club.Api.Util.ApiCode;
-import com.triple.club.Api.Util.ApiError;
-import com.triple.club.Api.Util.ApiErrorResponse;
+import com.triple.club.Api.util.ApiCode;
+import com.triple.club.Api.util.ApiError;
+import com.triple.club.Api.util.ApiErrorResponse;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

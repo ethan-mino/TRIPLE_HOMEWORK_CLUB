@@ -1,9 +1,9 @@
 package com.triple.club.Api.user.controller;
 
-import com.triple.club.Api.Util.ApiInfoResponse;
 import com.triple.club.Api.exception.InvalidInputException;
 import com.triple.club.Api.user.service.UserService;
 import com.triple.club.Api.user.vo.User;
+import com.triple.club.Api.util.ApiInfoResponse;
 import com.triple.club.config.security.JwtTokenProvider;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;

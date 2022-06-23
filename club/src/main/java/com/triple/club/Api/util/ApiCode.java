@@ -1,4 +1,4 @@
-package com.triple.club.Api.Util;
+package com.triple.club.Api.util;
 
 public enum ApiCode {
     ERROR_INVALID_ACCOUNT(500),
