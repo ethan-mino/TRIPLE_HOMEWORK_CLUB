@@ -18,13 +18,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean existsUser(String username){    // 아이디 중복 검사
+    public Boolean existsByUsername(String username){    // 아이디 중복 검사
         User user = userMapper.findUserByUsername(username);
         return !(user == null);
     }
 
     @Transactional
-    public int createUser(User user){
-        return userMapper.createUser(user);
+    public int save(User user){
+        return userMapper.save(user);
     }
 }
