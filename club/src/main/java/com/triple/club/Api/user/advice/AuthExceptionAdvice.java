@@ -1,17 +1,29 @@
 package com.triple.club.Api.user.advice;
 
-import com.triple.club.Api.user.exception.DuplicateUsernameException;
+import com.triple.club.Api.Util.ApiCode;
+import com.triple.club.Api.Util.ApiError;
+import com.triple.club.Api.Util.ApiErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
+
 @RestControllerAdvice
 public class AuthExceptionAdvice {
 
-    @ExceptionHandler(DuplicateUsernameException.class)
-    public ResponseEntity<String> duplicateUsernameHandler(DuplicateUsernameException ex){
-        String msg = ex.getUsername() + "은 이미 존재하는 아이디입니다.";
-        return ResponseEntity.ok(msg);
-    }
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> AuthExceptionHandler(AuthenticationException ex){
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse();
 
+        ApiError apiError = new ApiError();
+        apiError.setCode(ApiCode.ERROR_INVALID_ACCOUNT);
+        apiError.setMessage("Invalid Username or Password");
+        apiErrorResponse.setError(apiError);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(apiErrorResponse);
+    }
 }
