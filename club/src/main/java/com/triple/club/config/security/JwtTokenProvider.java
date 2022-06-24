@@ -51,13 +51,13 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        return req.getHeader(securityProperties.getJwt().getHEADER_STRING());
+        String token = req.getHeader(securityProperties.getJwt().getHEADER_STRING());
+        token = token.replace(securityProperties.getJwt().getTOKEN_PREFIX(), "");
+        return token;
     }
 
     // Jwt Token의 유효성 및 만료 기간 검사
     public boolean validateToken(String jwtToken) {
-        jwtToken.replace(securityProperties.getJwt().getTOKEN_PREFIX(), "");
-
         try {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(securityProperties.getJwt().getSecret())
