@@ -32,12 +32,12 @@ public class DBExceptionAdvice {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse();
 
         ApiError apiError = new ApiError();
-        apiError.setCode(ApiCode.ERR_SERVER);
+        apiError.setCode(ApiCode.ERR_INVALID_VALUE);
         apiError.setMessage("Duplicate Key Exception.");
         apiErrorResponse.setError(apiError);
 
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(apiErrorResponse);
     }
 }
