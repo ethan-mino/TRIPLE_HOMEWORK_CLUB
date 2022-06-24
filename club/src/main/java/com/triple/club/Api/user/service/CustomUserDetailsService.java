@@ -24,9 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         CustomUserDetails customUserDetails = CustomUserDetails.builder()
-                        .username(user.getUsername())
-                        .password(user.getPassword())
-                        .build();
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .build();
 
         return customUserDetails;
     }
