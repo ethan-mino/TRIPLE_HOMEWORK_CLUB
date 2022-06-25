@@ -52,7 +52,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String token = req.getHeader(securityProperties.getJwt().getHEADER_STRING());
-        token = token.replace(securityProperties.getJwt().getTOKEN_PREFIX(), "");
+        if(token != null) token = token.replace(securityProperties.getJwt().getTOKEN_PREFIX(), "");
         return token;
     }
 
