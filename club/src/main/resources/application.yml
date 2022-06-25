@@ -1,4 +1,7 @@
 server:
+  error:
+    include-exception: false
+    include-stacktrace: never
   port: 8080
 
 security:
@@ -8,12 +11,12 @@ security:
 
 spring:
   profiles:
-    active: dev
+    active: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${dev_URL}
-    username: ${dev_username}
-    password: ${dev_password}
+    url: ${PROD_URL}
+    username: ${prod_username}
+    password: ${prod_username}
 
 ---
 
@@ -30,9 +33,9 @@ spring:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${PROD_URL}
-    username: ${prod_username}
-    password: ${prod_username}
+    url: ${dev_URL}
+    username: ${dev_username}
+    password: ${dev_password}
