@@ -9,7 +9,10 @@
     </select>
 
     <insert id="save" keyProperty="id" parameterType="com.triple.club.Api.user.vo.User">
+        <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
+            SELECT UUID();
+        </selectKey>
         INSERT INTO user(id, username, password, created_at, updated_at)
-        VALUES (UUID(), #{username}, #{password}, NOW(), NOW());
+        VALUES (#{id}, #{username}, #{password}, NOW(), NOW());
     </insert>
 </mapper>
