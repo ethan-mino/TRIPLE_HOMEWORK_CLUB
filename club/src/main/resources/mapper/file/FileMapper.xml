@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.triple.club.Api.file.mapper.FileMapper">
+    <select id="findById" resultType="com.triple.club.Api.file.vo.FileVO">
+        SELECT id, owner_id, url, content_type, created_at, updated_at
+        FROM file
+        WHERE id = #{id}
+    </select>
+
+    <insert id="save" keyColumn="id" keyProperty="id" parameterType="com.triple.club.Api.file.vo.FileVO">
+        <selectKey keyProperty="id" keyColumn="id" order="BEFORE" resultType="java.lang.String">
+            SELECT UUID()
+        </selectKey>
+        INSERT INTO file(id, owner_id, url, content_type, created_at, updated_at)
+        VALUES (#{id}, #{ownerId}, #{url}, #{contentType}, NOW(), NOW())
+    </insert>
+
+    <update id="updateById" keyColumn="id" keyProperty="id" parameterType="com.triple.club.Api.file.vo.FileVO">
+        UPDATE file
+        SET url = #{url}, content_type = #{contentType}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id = "deleteById">
+        DELETE
+        FROM file
+        WHERE id = #{id}
+    </delete>
+</mapper>
