@@ -39,7 +39,7 @@ public class PlaceController {
     }
 
     @GetMapping("/{placeId}")    // 장소 조회 by id
-    public ResponseEntity<ApiInfoResponse<Place>> getPlaceById(@PathVariable String placeId){
+    public ResponseEntity<ApiInfoResponse<Place>> getPlaceById(@PathVariable("placeId") String placeId){
         ApiInfoResponse<Place> apiResponse = new ApiInfoResponse<>();
 
         Place place = placeService.findById(placeId);
@@ -74,7 +74,7 @@ public class PlaceController {
 
     @PutMapping("/{placeId}")    // 장소 수정 by id
     public ResponseEntity<ApiInfoResponse<Place>> updatePlaceById(@AuthenticationPrincipal CustomUserDetails user,
-                                                                  @PathVariable String placeId,
+                                                                  @PathVariable("placeId") String placeId,
                                                                   @Valid @RequestBody Place place,
                                                                   BindingResult bindingResult) throws SQLException{
         if(bindingResult.hasErrors()){
@@ -94,24 +94,6 @@ public class PlaceController {
                 Place updatedPlace = placeService.findById(placeId);  // 수정된 place 조회
                 apiResponse.setData(updatedPlace);
                 return ResponseEntity.ok(apiResponse);  // 200 응답
-            }else{  // 장소 수정에 실패한 경우
-                throw new SQLException();
-            }
-        }
-    }
-
-    @DeleteMapping("/{placeId}")   // 장소 삭제 by id
-    public ResponseEntity deletePlaceById(@AuthenticationPrincipal CustomUserDetails user,
-                                          @PathVariable String placeId) throws SQLException{
-        Place queriedPlace = placeService.findById(placeId);
-        if(queriedPlace == null){  // 해당 id의 장소가 존재하지 않는 경우
-            return ResponseEntity.notFound().build();   // 404 응답
-        }else if(!queriedPlace.getWriterId().equals(user.getId())){   // 해당 장소를 생성한 사람이 아니라면
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 응답
-        }else{  // 해당 id의 장소가 존재하는 경우
-            int deleteCnt = placeService.deleteById(placeId);
-            if(deleteCnt == 1){ // 장소 수정에 성공한 경우
-                return ResponseEntity.status(HttpStatus.OK).build(); // 200 응답
             }else{  // 장소 수정에 실패한 경우
                 throw new SQLException();
             }

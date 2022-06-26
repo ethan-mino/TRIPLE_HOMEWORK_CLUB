@@ -23,7 +23,7 @@
 
     <update id="updateById" keyProperty="id" parameterType="com.triple.club.Api.place.vo.Place">
         UPDATE place
-        SET name = #{name}, address = #{address}, latitude = #{latitude}, longitude = #{longitude}
+        SET name = #{name}, address = #{address}, latitude = #{latitude}, longitude = #{longitude}, updated_at = NOW()
         WHERE id = #{id}
     </update>
 
