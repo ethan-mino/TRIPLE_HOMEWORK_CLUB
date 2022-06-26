@@ -1,6 +1,6 @@
 package com.triple.club.config.security;
 
-import com.triple.club.Api.user.service.CustomUserDetailsService;
+import com.triple.club.api.user.service.CustomUserDetailsService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
