@@ -7,7 +7,7 @@ CREATE TABLE user (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-CREATE TABLE place (
+CREATE TABLE place(
       id VARCHAR(255) NOT NULL COMMENT '장소 아이디',
       name VARCHAR(255) NOT NULL COMMENT '장소 이름',
       writer_id VARCHAR(255) NOT NULL COMMENT '장소 생성자 아이디',
@@ -28,11 +28,11 @@ CREATE TABLE review(
     content TEXT NULL COMMENT '리뷰 내용',
     point INTEGER NOT NULL COMMENT '리뷰 포인트',
     created_at DATETIME NOT NULL COMMENT '생성 일자',
-    updated_At DATETIME NOT NULL COMMENT '수정 일자',
+    updated_at DATETIME NOT NULL COMMENT '수정 일자',
     PRIMARY KEY (id),
     UNIQUE KEY(place_id, writer_id),
     FOREIGN KEY (writer_id) REFERENCES user(id),
-    FOREIGN KEY (place_id) REFERENCES user(id) ON DELETE CASCADE
+    FOREIGN KEY (place_id) REFERENCES place(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE file(
@@ -47,8 +47,10 @@ CREATE TABLE file(
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE review_image(
+    id VARCHAR(255) NOT NULL COMMENT '리뷰 이미지 아이디',
     image_file_id VARCHAR(255) NOT NULL COMMENT '이미지 파일 아이디',
     review_id VARCHAR(255) NOT NULL COMMENT '리뷰 아이디',
+    PRIMARY KEY (id),
     FOREIGN KEY (image_file_id) REFERENCES file(id) ON DELETE CASCADE,
     FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
