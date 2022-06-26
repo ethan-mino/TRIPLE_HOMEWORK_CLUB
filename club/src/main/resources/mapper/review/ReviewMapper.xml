@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.triple.club.api.review.mapper.ReviewMapper">
+    <resultMap id="attachedPhotoIds" type="com.triple.club.api.review.vo.ReviewImage">
+        <id column="review_image_id" property="id"/>
+        <result column="image_file_id" property="imageFileId"/>
+        <result column="review_id" property="reviewId"/>
+    </resultMap>
+
+    <resultMap id="ReviewDetails" type="com.triple.club.api.review.dto.ReviewDetails">
+        <id column="id" property="id"/>
+        <result column="place_id" property="placeId"/>
+        <result column="writer_id" property="writerId"/>
+        <result column="content" property="content"/>
+        <result column="point" property="point"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <collection property="attachedPhotoIds" resultMap="attachedPhotoIds"/>
+    </resultMap>
+
+    <select id="findById" resultMap="ReviewDetails">
+        SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
+               review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
+        FROM review JOIN review_image ON review.id = review_image.review_id
+        WHERE review.id = #{id}
+    </select>
+
+    <select id="findByWriterId" resultMap="ReviewDetails">
+        SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
+               review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
+        FROM review JOIN review_image ON review.id = review_image.review_id
+        WHERE review.writer_id = #{writerId}
+    </select>
+
+    <select id="findByPlaceId" resultMap="ReviewDetails">
+        SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
+               review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
+        FROM review JOIN review_image ON review.id = review_image.review_id
+        WHERE review.place_id = #{placeId}
+    </select>
+
+    <insert id="save" parameterType="com.triple.club.api.review.vo.Review">
+        <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
+            SELECT UUID();
+        </selectKey>
+        INSERT INTO review(id, place_id, writer_id, content, point, created_at, updated_at)
+        VALUES (#{id}, #{placeId}, #{writerId}, #{content}, 0, NOW(), NOW())
+    </insert>
+
+    <update id="updateById" parameterType="com.triple.club.api.review.vo.Review">
+        UPDATE review
+        SET content = #{content}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM review
+        WHERE id = #{id}
+    </delete>
+</mapper>
