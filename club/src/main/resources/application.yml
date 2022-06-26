@@ -7,6 +7,18 @@ server:
 security:
   jwt:
     secret: ${JWT_SECRET}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
+    s3:
+      bucket: triple
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 ---
 
 spring:
@@ -15,8 +27,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${PROD_URL}
-    username: ${prod_username}
-    password: ${prod_username}
+    username: ${PROD_USERNAME}
+    password: ${PROD_PASSWORD}
 
 ---
 
@@ -26,8 +38,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TEST_URL}
-    username: ${test_username}
-    password: ${test_username}
+    username: ${TEST_USERNAME}
+    password: ${TEST_PASSWORD}
 
 ---
 
@@ -36,6 +48,6 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${dev_URL}
-    username: ${dev_username}
-    password: ${dev_password}
+    url: ${DEV_URL}
+    username: ${DEV_USERNAME}
+    password: ${DEV_PASSWORD}
