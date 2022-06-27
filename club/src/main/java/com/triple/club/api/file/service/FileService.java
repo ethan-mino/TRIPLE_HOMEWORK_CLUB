@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.triple.club.api.file.mapper.FileMapper;
 import com.triple.club.api.file.vo.FileVO;
-import org.springframework.beans.factory.annotation.Value;
+import com.triple.club.config.amazon.AmazonS3Config;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,14 +21,15 @@ import static com.triple.club.util.DateUtil.dateToString;
 
 @Service
 public class FileService {
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
     private final AmazonS3Client amazonS3Client;
     private final FileMapper fileMapper;
+    private final AmazonS3Config amazonS3Config;
 
-    public FileService(FileMapper fileMapper, AmazonS3Client amazonS3Client){
+    public FileService(FileMapper fileMapper,
+                       AmazonS3Client amazonS3Client, AmazonS3Config amazonS3Config){
         this.fileMapper = fileMapper;
         this.amazonS3Client = amazonS3Client;
+        this.amazonS3Config = amazonS3Config;
     }
 
     public String UploadToS3(String fileName, MultipartFile multipartFile) {
@@ -36,13 +37,13 @@ public class FileService {
         objectMetadata.setContentType(multipartFile.getContentType());
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+            amazonS3Client.putObject(new PutObjectRequest(amazonS3Config.getBucketName(), fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new RuntimeException();
         }
 
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
+        return amazonS3Client.getUrl(amazonS3Config.getBucketName(), fileName).toString();
     }
 
     @Transactional(readOnly = true)

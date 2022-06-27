@@ -9,10 +9,9 @@ security:
     secret: ${JWT_SECRET}
 
 cloud:
+  access: ${S3_ACCESS_KEY}
+  secret: ${S3_SECRET_KEY}
   aws:
-    credentials:
-      accessKey: ${S3_ACCESS_KEY}
-      secretKey: ${S3_SECRET_KEY}
     s3:
       bucket: triple
     region:
