@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class Place {
+public class PlaceEntity {
     private String id;
     private String writerId;
 

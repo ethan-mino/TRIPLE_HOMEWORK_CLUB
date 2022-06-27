@@ -1,7 +1,7 @@
 package com.triple.club.api.user.service;
 
 import com.triple.club.api.user.dto.CustomUserDetails;
-import com.triple.club.api.user.entity.User;
+import com.triple.club.api.user.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findUserByUsername(username);
+        UserEntity user = userService.findUserByUsername(username);
 
         if(user == null){
             throw new UsernameNotFoundException("Username Not Found");

@@ -1,7 +1,7 @@
 package com.triple.club.api.place.service;
 
 import com.triple.club.api.place.mapper.PlaceMapper;
-import com.triple.club.api.place.entity.Place;
+import com.triple.club.api.place.entity.PlaceEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +15,16 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<Place> findAll(){return placeMapper.findAll();}
+    public List<PlaceEntity> findAll(){return placeMapper.findAll();}
 
     @Transactional(readOnly = true)
-    public Place findById(String id){return placeMapper.findById(id);}
+    public PlaceEntity findById(String id){return placeMapper.findById(id);}
 
     @Transactional
-    public int save(Place place){return placeMapper.save(place);}
+    public int save(PlaceEntity place){return placeMapper.save(place);}
 
     @Transactional
-    public int updateById(Place place){return placeMapper.updateById(place);}
+    public int updateById(PlaceEntity place){return placeMapper.updateById(place);}
 
     @Transactional
     public int deleteById(String id){return placeMapper.deleteById(id);}

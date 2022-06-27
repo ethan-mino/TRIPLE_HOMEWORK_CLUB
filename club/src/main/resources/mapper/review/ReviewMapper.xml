@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.triple.club.api.review.mapper.ReviewMapper">
-    <resultMap id="attachedPhotoIds" type="com.triple.club.api.review.entity.ReviewImage">
+    <resultMap id="attachedPhotoIds" type="com.triple.club.api.review.entity.ReviewImageEntity">
         <id column="review_image_id" property="id"/>
         <result column="image_file_id" property="imageFileId"/>
         <result column="review_id" property="reviewId"/>
@@ -40,7 +40,7 @@
         WHERE review.place_id = #{placeId}
     </select>
 
-    <insert id="save" parameterType="com.triple.club.api.review.entity.Review">
+    <insert id="save" parameterType="com.triple.club.api.review.entity.ReviewEntity">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
             SELECT UUID();
         </selectKey>
@@ -48,7 +48,7 @@
         VALUES (#{id}, #{placeId}, #{writerId}, #{content}, 0, NOW(), NOW())
     </insert>
 
-    <update id="updateById" parameterType="com.triple.club.api.review.entity.Review">
+    <update id="updateById" parameterType="com.triple.club.api.review.entity.ReviewEntity">
         UPDATE review
         SET content = #{content}, updated_at = NOW()
         WHERE id = #{id}

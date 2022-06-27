@@ -1,7 +1,7 @@
 package com.triple.club.api.user.service;
 
 import com.triple.club.api.user.mapper.UserMapper;
-import com.triple.club.api.user.entity.User;
+import com.triple.club.api.user.entity.UserEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,18 +13,18 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findUserByUsername(String username){
+    public UserEntity findUserByUsername(String username){
         return userMapper.findUserByUsername(username);
     }
 
     @Transactional(readOnly = true)
     public Boolean existsByUsername(String username){    // 아이디 중복 검사
-        User user = userMapper.findUserByUsername(username);
+        UserEntity user = userMapper.findUserByUsername(username);
         return !(user == null);
     }
 
     @Transactional
-    public int save(User user){
+    public int save(UserEntity user){
         return userMapper.save(user);
     }
 }

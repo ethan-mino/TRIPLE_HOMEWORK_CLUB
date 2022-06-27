@@ -2,7 +2,7 @@ package com.triple.club.api.user.controller;
 
 import com.triple.club.api.exception.InvalidInputException;
 import com.triple.club.api.user.service.UserService;
-import com.triple.club.api.user.entity.User;
+import com.triple.club.api.user.entity.UserEntity;
 import com.triple.club.api.util.ApiInfoResponse;
 import com.triple.club.config.security.JwtTokenProvider;
 import org.springframework.dao.DuplicateKeyException;
@@ -31,9 +31,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiInfoResponse<String>> login(@RequestBody User user) throws AuthenticationException {
+    public ResponseEntity<ApiInfoResponse<String>> login(@RequestBody UserEntity user) throws AuthenticationException {
         String username = user.getUsername();
-        User queriedUser = userService.findUserByUsername(username);
+        UserEntity queriedUser = userService.findUserByUsername(username);
 
         // 아이디 또는 비밀번호가 일치하지 않는 경우
         if(queriedUser == null || !passwordEncoder.matches(user.getPassword(), queriedUser.getPassword())){
@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @PostMapping("/signup") // 회원가입
-    public ResponseEntity<ApiInfoResponse<User>> signup(@Valid @RequestBody User user, BindingResult bindingResult)  throws SQLException{
-        ApiInfoResponse<User> apiResponse = new ApiInfoResponse<>();
+    public ResponseEntity<ApiInfoResponse<UserEntity>> signup(@Valid @RequestBody UserEntity user, BindingResult bindingResult)  throws SQLException{
+        ApiInfoResponse<UserEntity> apiResponse = new ApiInfoResponse<>();
 
         if(bindingResult.hasErrors()){
             throw new InvalidInputException();
@@ -65,7 +65,7 @@ public class UserController {
                 int createCnt = userService.save(user);
 
                 if(createCnt == 1){ // 계정이 생성된 경우
-                    User createdUser = userService.findUserByUsername(username);
+                    UserEntity createdUser = userService.findUserByUsername(username);
                     apiResponse.setData(createdUser);
                     return ResponseEntity.ok(apiResponse);
                 }else{  // 계정 생성에 실패한 경우

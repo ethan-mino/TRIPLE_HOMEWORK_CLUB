@@ -6,13 +6,13 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ReviewImage {
+public class ReviewImageEntity {
     private String id;
     private String imageFileId;
     private String reviewId;
 
     @Builder
-    public ReviewImage(String id, String imageFileId, String reviewId){
+    public ReviewImageEntity(String id, String imageFileId, String reviewId){
         super();
         this.id = id;
         this.imageFileId = imageFileId;

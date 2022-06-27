@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class Review {
+public class ReviewEntity {
     private String id;
     private String placeId;
     private String writerId;

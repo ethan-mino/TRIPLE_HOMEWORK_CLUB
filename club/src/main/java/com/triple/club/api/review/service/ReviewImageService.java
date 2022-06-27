@@ -1,7 +1,7 @@
 package com.triple.club.api.review.service;
 
 import com.triple.club.api.review.mapper.ReviewImageMapper;
-import com.triple.club.api.review.entity.ReviewImage;
+import com.triple.club.api.review.entity.ReviewImageEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,12 @@ public class ReviewImageService {
     public ReviewImageService(ReviewImageMapper reviewImageMapper){
         this.reviewImageMapper = reviewImageMapper;
     }
-    List<ReviewImage> findByReviewId(String reviewId){
+    List<ReviewImageEntity> findByReviewId(String reviewId){
         return reviewImageMapper.findByReviewId(reviewId);
     }
 
     @Transactional(readOnly = false)
-    int save(ReviewImage reviewImage){
+    int save(ReviewImageEntity reviewImage){
         return reviewImageMapper.save(reviewImage);
     }
 }

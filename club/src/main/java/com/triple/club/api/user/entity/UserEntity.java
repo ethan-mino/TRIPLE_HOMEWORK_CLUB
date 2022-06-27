@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class User {
+public class UserEntity {
     private String id;
 
     @NotBlank

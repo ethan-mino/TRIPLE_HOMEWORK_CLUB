@@ -3,7 +3,7 @@ package com.triple.club.api.review.controller;
 import com.triple.club.api.exception.InvalidInputException;
 import com.triple.club.api.review.dto.ReviewDetails;
 import com.triple.club.api.review.service.ReviewService;
-import com.triple.club.api.review.entity.Review;
+import com.triple.club.api.review.entity.ReviewEntity;
 import com.triple.club.api.user.dto.CustomUserDetails;
 import com.triple.club.api.util.ApiInfoResponse;
 import org.springframework.http.HttpStatus;
@@ -57,7 +57,7 @@ public class ReviewController {
     public ResponseEntity<ApiInfoResponse<ReviewDetails>> createReview(@AuthenticationPrincipal CustomUserDetails user,
                                                                        List<MultipartFile> reviewImages,
                                                                        @PathVariable("placeId") String placeId,
-                                                                       @Valid Review review,
+                                                                       @Valid ReviewEntity review,
                                                                        BindingResult bindingResult) throws SQLException{
         if(bindingResult.hasErrors()){  // 리뷰 정보 Validation
             throw new InvalidInputException();
@@ -82,7 +82,7 @@ public class ReviewController {
     public ResponseEntity<ApiInfoResponse<ReviewDetails>> updateReview(@AuthenticationPrincipal CustomUserDetails user,
                                                                        List<MultipartFile> reviewImages,
                                                                        @PathVariable("reviewId") String reviewId,
-                                                                       @Valid Review review,
+                                                                       @Valid ReviewEntity review,
                                                                        BindingResult bindingResult) throws SQLException{
         if(bindingResult.hasErrors()){  // 리뷰 정보 Validation
             throw new InvalidInputException();

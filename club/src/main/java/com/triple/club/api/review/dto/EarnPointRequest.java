@@ -1,7 +1,7 @@
 package com.triple.club.api.review.dto;
 
 import com.triple.club.api.review.EarnPointAction;
-import com.triple.club.api.review.entity.ReviewImage;
+import com.triple.club.api.review.entity.ReviewImageEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +16,7 @@ public class EarnPointRequest {
     private EarnPointAction action;
     private String reviewId;
     private String content;
-    private List<ReviewImage> attachedPhotoIds;
+    private List<ReviewImageEntity> attachedPhotoIds;
     private String userId;
     private String placeId;
 }
