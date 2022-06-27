@@ -1,0 +1,63 @@
+version: "3.7"
+
+services:
+  db-mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=triple
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=triple
+      - MYSQL_DATABASE=triple_dev
+    ports:
+      - 3306:3306
+    networks:
+      - springboot-mysql-net
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+  club-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db-mysql
+    environment:
+      - JWT_SECRET=asdawqelkajsldakxqkuhweoihkdajnskajhdoas
+      - S3_ACCESS_KEY=AKIAUYRHASSCEHRS2MWG
+      - S3_SECRET_KEY=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
+      - DEV_USERNAME=dev
+      - DEV_PASSWORD=triple
+      - DEV_URL=jdbc:mysql://db-mysql:3306/triple_dev?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      - TEST_USERNAME=test
+      - TEST_PASSWORD=test
+      - TEST_URL=jdbc:mysql://db-mysql:3306/triple_test?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      - PROD_USERNAME=prod
+      - PROD_PASSWORD=triple
+      - PROD_URL=jdbc:mysql://13.124.78.167:3306/triple?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    networks:
+      - springboot-mysql-net
+  point-app:
+    build:
+      context: ../../TRIPLE_HOMEWORK_POINT
+      dockerfile: Dockerfile
+    ports:
+      - 3030:3030
+    depends_on:
+      - db-mysql
+    environment:
+      - DEV_USERNAME=dev
+      - DEV_PASSWORD=triple
+      - DEV_URL=jdbc:mysql://db-mysql:3306/triple_dev?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      - TEST_USERNAME=test
+      - TEST_PASSWORD=test
+      - TEST_URL=jdbc:mysql://db-mysql:3306/triple_test?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      - PROD_USERNAME=prod
+      - PROD_PASSWORD=triple
+      - PROD_URL=jdbc:mysql://13.124.78.167:3306/triple?serverTimezone=Asia/Seoul&useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    networks:
+      - springboot-mysql-net
+networks:
+  springboot-mysql-net:
+    driver: bridge
