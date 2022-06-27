@@ -3,14 +3,14 @@ package com.triple.club.api.review.service;
 import com.triple.club.api.exception.FailToEarnPointException;
 import com.triple.club.api.exception.TransactionFailureException;
 import com.triple.club.api.file.service.FileService;
-import com.triple.club.api.file.vo.FileVO;
+import com.triple.club.api.file.entity.FileEntity;
 import com.triple.club.api.review.EarnPointAction;
 import com.triple.club.api.review.dto.EarnPointRequest;
 import com.triple.club.api.review.dto.ReviewDetails;
 import com.triple.club.api.review.mapper.ReviewImageMapper;
 import com.triple.club.api.review.mapper.ReviewMapper;
-import com.triple.club.api.review.vo.Review;
-import com.triple.club.api.review.vo.ReviewImage;
+import com.triple.club.api.review.entity.Review;
+import com.triple.club.api.review.entity.ReviewImage;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -91,8 +91,8 @@ public class ReviewService {
             String ownerId = review.getWriterId();  // 리뷰 작성자 id
             String reviewId = review.getId();
 
-            List<FileVO> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
-            for(FileVO reviewFile : reviewFileList){    // 각 이미지 파일에 대해 리뷰 이미지 정보를 저장
+            List<FileEntity> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
+            for(FileEntity reviewFile : reviewFileList){    // 각 이미지 파일에 대해 리뷰 이미지 정보를 저장
                 ReviewImage reviewImage = ReviewImage.builder()
                                 .reviewId(review.getId())
                                 .imageFileId(reviewFile.getId())
@@ -119,10 +119,10 @@ public class ReviewService {
         if(updateCnt == 1){
             String ownerId = review.getWriterId();  // 리뷰 작성자 id
             String reviewId = review.getId();   // 리뷰 아이디
-            List<FileVO> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
+            List<FileEntity> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
 
             reviewImageMapper.deleteByReviewId(reviewId);   // 해당 리뷰의 이미지 정보 제거
-            for(FileVO reviewFile : reviewFileList){    // 각 이미지 파일에 대해 리뷰 이미지 정보를 저장
+            for(FileEntity reviewFile : reviewFileList){    // 각 이미지 파일에 대해 리뷰 이미지 정보를 저장
                 ReviewImage reviewImage = ReviewImage.builder()
                         .reviewId(review.getId())
                         .imageFileId(reviewFile.getId())

@@ -2,7 +2,7 @@ package com.triple.club.api.user.controller;
 
 import com.triple.club.api.exception.InvalidInputException;
 import com.triple.club.api.user.service.UserService;
-import com.triple.club.api.user.vo.User;
+import com.triple.club.api.user.entity.User;
 import com.triple.club.api.util.ApiInfoResponse;
 import com.triple.club.config.security.JwtTokenProvider;
 import org.springframework.dao.DuplicateKeyException;

@@ -1,7 +1,7 @@
 package com.triple.club.api.place.service;
 
 import com.triple.club.api.place.mapper.PlaceMapper;
-import com.triple.club.api.place.vo.Place;
+import com.triple.club.api.place.entity.Place;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

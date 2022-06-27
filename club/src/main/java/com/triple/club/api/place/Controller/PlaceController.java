@@ -2,7 +2,7 @@ package com.triple.club.api.place.Controller;
 
 import com.triple.club.api.exception.InvalidInputException;
 import com.triple.club.api.place.service.PlaceService;
-import com.triple.club.api.place.vo.Place;
+import com.triple.club.api.place.entity.Place;
 import com.triple.club.api.user.dto.CustomUserDetails;
 import com.triple.club.api.util.ApiInfoResponse;
 import org.springframework.http.HttpStatus;

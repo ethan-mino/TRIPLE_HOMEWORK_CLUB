@@ -3,7 +3,7 @@ package com.triple.club.api.review.controller;
 import com.triple.club.api.exception.InvalidInputException;
 import com.triple.club.api.review.dto.ReviewDetails;
 import com.triple.club.api.review.service.ReviewService;
-import com.triple.club.api.review.vo.Review;
+import com.triple.club.api.review.entity.Review;
 import com.triple.club.api.user.dto.CustomUserDetails;
 import com.triple.club.api.util.ApiInfoResponse;
 import org.springframework.http.HttpStatus;
@@ -67,7 +67,7 @@ public class ReviewController {
         String writerId = user.getId(); // 리뷰 작성자의 id
         review.setWriterId(writerId);
         review.setPlaceId(placeId);
-        
+
         int createCnt = reviewService.createReview(review, reviewImages);   // 리뷰 생성
         if(createCnt == 1){
             ReviewDetails createdReview = reviewService.findById(review.getId());  // 생성된 리뷰 조회

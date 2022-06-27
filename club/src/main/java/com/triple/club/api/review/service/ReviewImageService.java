@@ -1,7 +1,7 @@
 package com.triple.club.api.review.service;
 
 import com.triple.club.api.review.mapper.ReviewImageMapper;
-import com.triple.club.api.review.vo.ReviewImage;
+import com.triple.club.api.review.entity.ReviewImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,7 @@
 package com.triple.club.api.review.mapper;
 
 import com.triple.club.api.review.dto.ReviewDetails;
-import com.triple.club.api.review.vo.Review;
+import com.triple.club.api.review.entity.Review;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

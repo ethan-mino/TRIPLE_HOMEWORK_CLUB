@@ -1,6 +1,6 @@
 package com.triple.club.api.review.mapper;
 
-import com.triple.club.api.review.vo.ReviewImage;
+import com.triple.club.api.review.entity.ReviewImage;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

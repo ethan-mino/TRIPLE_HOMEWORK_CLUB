@@ -1,6 +1,6 @@
 package com.triple.club.api.place.mapper;
 
-import com.triple.club.api.place.vo.Place;
+import com.triple.club.api.place.entity.Place;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

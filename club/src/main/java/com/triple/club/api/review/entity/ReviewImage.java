@@ -1,4 +1,4 @@
-package com.triple.club.api.review.vo;
+package com.triple.club.api.review.entity;
 
 import lombok.*;
 

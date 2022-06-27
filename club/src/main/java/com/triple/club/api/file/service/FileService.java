@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.triple.club.api.file.mapper.FileMapper;
-import com.triple.club.api.file.vo.FileVO;
+import com.triple.club.api.file.entity.FileEntity;
 import com.triple.club.config.amazon.AmazonS3Config;
 import com.triple.club.util.converter.DateConverter;
 import org.springframework.stereotype.Service;
@@ -46,13 +46,13 @@ public class FileService {
     }
 
     @Transactional(readOnly = true)
-    public FileVO findById(String id){
+    public FileEntity findById(String id){
         return fileMapper.findById(id);
     }
 
     @Transactional
-    public List<FileVO> saveFiles(List<MultipartFile> multipartFiles, String ownerId){
-        List<FileVO> fileVOList = new ArrayList<>();
+    public List<FileEntity> saveFiles(List<MultipartFile> multipartFiles, String ownerId){
+        List<FileEntity> fileEntityList = new ArrayList<>();
 
         for(MultipartFile multipartFile : multipartFiles){
             String originalFilename = multipartFile.getOriginalFilename();
@@ -62,21 +62,21 @@ public class FileService {
             String newFilename = now + "_" + originalFilename;
             String url = UploadToS3(newFilename, multipartFile);
 
-            FileVO file = FileVO.builder()
+            FileEntity file = FileEntity.builder()
                     .contentType(contentType)
                     .ownerId(ownerId)
                     .url(url)
                     .build();
             fileMapper.save(file);
-            fileVOList.add(file);
+            fileEntityList.add(file);
         }
 
-        return fileVOList;
+        return fileEntityList;
     }
 
     @Transactional
-    public int updateById(FileVO fileVO){
-        return fileMapper.updateById(fileVO);
+    public int updateById(FileEntity fileEntity){
+        return fileMapper.updateById(fileEntity);
     }
 
     @Transactional

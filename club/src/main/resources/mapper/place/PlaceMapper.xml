@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.triple.club.api.place.mapper.PlaceMapper">
-    <select id="findAll" resultType="com.triple.club.api.place.vo.Place">
+    <select id="findAll" resultType="com.triple.club.api.place.entity.Place">
         SELECT id, name, writer_id, address, latitude, longitude, created_at, updated_at
         FROM place
     </select>
 
-    <select id="findById" resultType="com.triple.club.api.place.vo.Place">
+    <select id="findById" resultType="com.triple.club.api.place.entity.Place">
         SELECT id, name, writer_id, address, latitude, longitude, created_at, updated_at
         FROM place
         WHERE id = #{id}
     </select>
 
-    <insert id="save" keyColumn="id" keyProperty="id" parameterType="com.triple.club.api.place.vo.Place">
+    <insert id="save" keyColumn="id" keyProperty="id" parameterType="com.triple.club.api.place.entity.Place">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
             SELECT UUID();
         </selectKey>
@@ -21,7 +21,7 @@
         VALUES(#{id}, #{name}, #{writerId}, #{address}, #{latitude}, #{longitude}, NOW(), NOW());
     </insert>
 
-    <update id="updateById" keyProperty="id" parameterType="com.triple.club.api.place.vo.Place">
+    <update id="updateById" keyProperty="id" parameterType="com.triple.club.api.place.entity.Place">
         UPDATE place
         SET name = #{name}, address = #{address}, latitude = #{latitude}, longitude = #{longitude}, updated_at = NOW()
         WHERE id = #{id}

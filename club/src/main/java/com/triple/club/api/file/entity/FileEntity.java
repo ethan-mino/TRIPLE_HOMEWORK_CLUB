@@ -1,4 +1,4 @@
-package com.triple.club.api.file.vo;
+package com.triple.club.api.file.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FileVO {
+public class FileEntity {
     private String id;
     private String ownerId;
     private String url;
@@ -24,7 +24,7 @@ public class FileVO {
     private Date updatedAt;
 
     @Builder
-    public FileVO(String id, String ownerId, String url, String contentType, Date createdAt, Date updatedAt){
+    public FileEntity(String id, String ownerId, String url, String contentType, Date createdAt, Date updatedAt){
         this.id = id;
         this.ownerId = ownerId;
         this.url = url;

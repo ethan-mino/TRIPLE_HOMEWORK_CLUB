@@ -1,7 +1,7 @@
 package com.triple.club.api.user.service;
 
 import com.triple.club.api.user.dto.CustomUserDetails;
-import com.triple.club.api.user.vo.User;
+import com.triple.club.api.user.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

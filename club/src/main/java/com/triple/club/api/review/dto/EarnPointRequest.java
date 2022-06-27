@@ -1,7 +1,7 @@
 package com.triple.club.api.review.dto;
 
 import com.triple.club.api.review.EarnPointAction;
-import com.triple.club.api.review.vo.ReviewImage;
+import com.triple.club.api.review.entity.ReviewImage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

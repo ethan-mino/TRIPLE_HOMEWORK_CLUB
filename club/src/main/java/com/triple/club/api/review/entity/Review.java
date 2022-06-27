@@ -1,4 +1,4 @@
-package com.triple.club.api.review.vo;
+package com.triple.club.api.review.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.triple.club.api.user.mapper;
 
-import com.triple.club.api.user.vo.User;
+import com.triple.club.api.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
