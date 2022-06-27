@@ -1,24 +1,33 @@
 package com.triple.club.api.review.service;
 
+import com.triple.club.api.exception.FailToEarnPointException;
+import com.triple.club.api.exception.TransactionFailureException;
 import com.triple.club.api.file.service.FileService;
 import com.triple.club.api.file.vo.FileVO;
+import com.triple.club.api.review.EarnPointAction;
+import com.triple.club.api.review.dto.EarnPointRequest;
 import com.triple.club.api.review.dto.ReviewDetails;
 import com.triple.club.api.review.mapper.ReviewImageMapper;
 import com.triple.club.api.review.mapper.ReviewMapper;
 import com.triple.club.api.review.vo.Review;
 import com.triple.club.api.review.vo.ReviewImage;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
 public class ReviewService {
-
     private final FileService fileService;
     private final ReviewMapper reviewMapper;
     private final ReviewImageMapper reviewImageMapper;
+    private final String POINT_EARN_TYPE = "REVIEW";
+    private final String POINT_EARN_URL = "http://localhost:3030/events";
 
     public ReviewService(ReviewMapper reviewMapper,
                          FileService fileService,
@@ -26,6 +35,37 @@ public class ReviewService {
         this.reviewMapper = reviewMapper;
         this.fileService = fileService;
         this.reviewImageMapper = reviewImageMapper;
+    }
+
+    private void pointEarn(ReviewDetails review, HttpMethod method, EarnPointAction action){
+        ModelMapper modelMapper = new ModelMapper();
+        EarnPointRequest pointRequest = modelMapper.map(review, EarnPointRequest.class);
+        pointRequest.setUserId(review.getWriterId());
+        pointRequest.setAction(action);
+        pointRequest.setType(POINT_EARN_TYPE);
+
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Object> entity = new HttpEntity<>(pointRequest, headers);
+
+        try{
+            ResponseEntity<String> pointResponse = rt.exchange( // 포인트 적립 API에 request
+                    POINT_EARN_URL, method,
+                    entity, String.class
+            );
+
+            int statusCode = pointResponse.getStatusCodeValue();
+
+            if(statusCode != HttpStatus.OK.value()  // 포인트 적립에 실패한 경우
+                    && statusCode != HttpStatus.CREATED.value()
+                    && statusCode == HttpStatus.NO_CONTENT.value()){
+                throw new FailToEarnPointException();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new FailToEarnPointException();
+
+        }
     }
 
     @Transactional(readOnly = true)
@@ -49,6 +89,8 @@ public class ReviewService {
 
         if(createCnt == 1){
             String ownerId = review.getWriterId();  // 리뷰 작성자 id
+            String reviewId = review.getId();
+
             List<FileVO> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
             for(FileVO reviewFile : reviewFileList){    // 각 이미지 파일에 대해 리뷰 이미지 정보를 저장
                 ReviewImage reviewImage = ReviewImage.builder()
@@ -57,15 +99,21 @@ public class ReviewService {
                                 .build();
                 reviewImageMapper.save(reviewImage);    // 리뷰 이미지 정보 저장
             }
-            return createCnt;   // 리뷰 정보를 생성한 개수 반환
-        }else{
-            return 0;
+            ReviewDetails reviewDetails = findById(reviewId);
+            try{
+                pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.ADD); // 포인트 적립
+            }catch (FailToEarnPointException ex){
+                ex.printStackTrace();
+                throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
+            }
         }
+
+        return createCnt;   // 리뷰 정보를 생성한 개수 반환
     }
 
     @Transactional(readOnly = false)
     public int updateById(Review review,
-                                List<MultipartFile> reviewImages){
+                                List<MultipartFile> reviewImages) throws TransactionException {
 
         int updateCnt = reviewMapper.updateById(review);  // 리뷰 정보 저장
         if(updateCnt == 1){
@@ -81,14 +129,29 @@ public class ReviewService {
                         .build();
                 reviewImageMapper.save(reviewImage);    // 리뷰 이미지 정보 저장
             }
-            return updateCnt;   // 리뷰 정보를 수정한 개수 반환
-        }else{
-            return 0;
+
+            ReviewDetails reviewDetails = findById(reviewId);
+            try{
+                pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.MOD); // 포인트 적립
+            }catch (FailToEarnPointException ex){
+                throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
+            }
         }
+        return updateCnt;   // 리뷰 정보를 수정한 개수 반환
     }
 
     @Transactional(readOnly = false)
     public int deleteById(String id){
-        return reviewMapper.deleteById(id);
+        ReviewDetails reviewDetails = findById(id);
+
+        int deleteCnt = reviewMapper.deleteById(id);
+
+        try{
+            pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.DELETE); // 포인트 적립
+        }catch (FailToEarnPointException ex){
+            throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
+        }
+
+        return deleteCnt;
     }
 }

@@ -67,7 +67,7 @@ public class ReviewController {
         String writerId = user.getId(); // 리뷰 작성자의 id
         review.setWriterId(writerId);
         review.setPlaceId(placeId);
-
+        
         int createCnt = reviewService.createReview(review, reviewImages);   // 리뷰 생성
         if(createCnt == 1){
             ReviewDetails createdReview = reviewService.findById(review.getId());  // 생성된 리뷰 조회
