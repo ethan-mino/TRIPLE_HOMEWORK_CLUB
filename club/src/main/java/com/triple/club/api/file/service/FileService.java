@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.triple.club.api.file.mapper.FileMapper;
 import com.triple.club.api.file.vo.FileVO;
 import com.triple.club.config.amazon.AmazonS3Config;
+import com.triple.club.util.converter.DateConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +17,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.triple.club.util.DateUtil.dateToString;
 
 @Service
 public class FileService {
@@ -59,7 +58,7 @@ public class FileService {
             String originalFilename = multipartFile.getOriginalFilename();
             String contentType = multipartFile.getContentType();
 
-            String now = dateToString(new Date(), "YYYY-MM-dd HH:mm:ss");
+            String now = DateConverter.convert(new Date(), "YYYY-MM-dd HH:mm:ss");
             String newFilename = now + "_" + originalFilename;
             String url = UploadToS3(newFilename, multipartFile);
 

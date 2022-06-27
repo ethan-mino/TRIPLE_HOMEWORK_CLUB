@@ -6,6 +6,7 @@ import com.triple.club.api.util.ApiErrorResponse;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,8 +14,8 @@ import java.sql.SQLException;
 
 @RestControllerAdvice
 public class DBExceptionAdvice {
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity<ApiErrorResponse> SQLExceptionHandler(SQLException ex){
+    @ExceptionHandler({SQLException.class, TransactionException.class})
+    public ResponseEntity<ApiErrorResponse> DBExceptionHandler(Exception ex){
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse();
 
         ApiError apiError = new ApiError();
