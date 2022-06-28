@@ -36,7 +36,7 @@ public class ReviewService {
 
         int pointVariance = 0;  // 변동된 포인트
         ReviewEntity firstReview = reviewMapper.findFirstReviewByPlaceId(placeId); // 해당 장소의 첫 리뷰 확인
-        if(review.getContent().trim().length() > 0){    // 1자 이상 텍스트를 작성한 경우 (양쪽 공백 제외)
+        if(review.getContent() != null && review.getContent().trim().length() > 0) {    // 1자 이상 텍스트를 작성한 경우 (양쪽 공백 제외)
             pointVariance++;
         }
         if(review.getAttachedPhotoIds().size() > 0){    // 1장 이상 사진 첨부한 경우

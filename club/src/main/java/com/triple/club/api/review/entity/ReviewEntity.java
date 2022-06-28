@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -15,6 +16,7 @@ public class ReviewEntity {
     private String placeId;
     private String writerId;
 
+    @NotNull
     private String content;
     private int point;
 
