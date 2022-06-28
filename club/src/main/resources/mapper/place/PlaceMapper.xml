@@ -15,7 +15,7 @@
 
     <insert id="save" keyColumn="id" keyProperty="id" parameterType="com.triple.club.api.place.entity.PlaceEntity">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
-            REPLACE(UUID(),'-','')
+            SELECT REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO place(id, name, writer_id, address, latitude, longitude, created_at, updated_at)
         VALUES(#{id}, #{name}, #{writerId}, #{address}, #{latitude}, #{longitude}, NOW(), NOW());

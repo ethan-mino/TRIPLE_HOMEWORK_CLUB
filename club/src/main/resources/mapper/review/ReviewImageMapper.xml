@@ -10,7 +10,7 @@
 
     <insert id = "save" parameterType="com.triple.club.api.review.entity.ReviewImageEntity">
         <selectKey keyColumn="id" keyProperty="id" order="BEFORE" resultType="java.lang.String">
-            REPLACE(UUID(),'-','')
+            SELECT REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO review_image (id, image_file_id, review_id)
         VALUES (#{id}, #{imageFileId}, #{reviewId})

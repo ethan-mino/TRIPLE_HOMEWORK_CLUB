@@ -10,7 +10,7 @@
 
     <insert id="save" keyProperty="id" parameterType="com.triple.club.api.user.entity.UserEntity">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
-            REPLACE(UUID(),'-','')
+            SELECT REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO user(id, username, password, created_at, updated_at)
         VALUES (#{id}, #{username}, #{password}, NOW(), NOW());

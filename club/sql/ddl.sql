@@ -1,7 +1,7 @@
 CREATE TABLE user (
     id VARCHAR(32) NOT NULL COMMENT '유저 아이디',
     username VARCHAR(30) UNIQUE NOT NULL COMMENT '유저 아이디',
-    password VARCHAR(30) NOT NULL COMMENT '유저 비밀번호',
+    password VARCHAR(80) NOT NULL COMMENT '유저 비밀번호',
     created_at DATETIME NOT NULL COMMENT '생성 일자',
     updated_at DATETIME NOT NULL COMMENT '수정 일자',
     PRIMARY KEY (id)
