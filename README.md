@@ -7,7 +7,7 @@ Triple Open Recruitment Assignment
 </p>
 
 ## 📃 Document
-* 접속하실 수 없으시면, 초대해드리겠습니다!
+* 접속하실 수 없으시면, 초대해 드리겠습니다!
 * API 명세 [Postman](https://cloudy-comet-98520.postman.co/workspace/My-Workspace~e5f512fc-bd24-413a-89a3-aa73b3a0ae7d/documentation/17630551-b8fe4125-6f18-409f-a7cb-ac43f24b8781)
 
 ## 💻 API 
@@ -35,7 +35,9 @@ Triple Open Recruitment Assignment
       /events로 전달하는 대신 Review API의 Service 단에서 리뷰 조작 시 포인트를 계산/부여하도록 했습니다.
 
     - 포인트 증감 이력 조회 API는 작성하지 않았습니다. 리뷰를 조작할 때 서버 내부에서 이력을 기록합니다.
-
+    
+    - DDL은 TRIPLE_HOMEWORK_CLUB/club/sql에서 확인하실 수 있습니다.
+    
     - 작성한 테스트 코드는 없습니다.
 
 ## 🚀 Execution
