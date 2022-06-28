@@ -5,6 +5,10 @@ Triple Open Recruitment Assignment
   <img src= "https://user-images.githubusercontent.com/53431518/176169705-66d52a9c-8e39-4347-badd-b21e848b7bbd.png"></img>
   클럽 마일리지 서비스 ERD
 </p>
+<p align = "center">
+  <img src= "[https://user-images.githubusercontent.com/53431518/176169705-66d52a9c-8e39-4347-badd-b21e848b7bbd.png](https://user-images.githubusercontent.com/53431518/176205508-cb133d64-7501-466b-b422-6e5bb1cb3dbe.png)"></img>
+  Point Logic Flow Chart
+</p>
 
 ## 📃 Document
 * 접속하실 수 없으시면, 초대해 드리겠습니다!
