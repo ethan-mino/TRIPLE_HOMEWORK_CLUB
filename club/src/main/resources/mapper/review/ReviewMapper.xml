@@ -42,7 +42,7 @@
 
     <insert id="save" parameterType="com.triple.club.api.review.entity.ReviewEntity">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
-            SELECT UUID();
+            REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO review(id, place_id, writer_id, content, point, created_at, updated_at)
         VALUES (#{id}, #{placeId}, #{writerId}, #{content}, 0, NOW(), NOW())
@@ -82,7 +82,7 @@
 
     <insert id="updateReviewPointByOwnerId">
         <selectKey keyColumn="id" keyProperty="id" order="BEFORE" resultType="java.lang.String">
-            SELECT UUID()
+            REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO review_point(id, owner_id, point)
         VALUES (#{id}, #{ownerId}, #{variance})
@@ -91,7 +91,7 @@
 
     <insert id="saveLog" parameterType="com.triple.club.api.review.entity.PointLog">
         <selectKey keyProperty="id" keyColumn="id" resultType="java.lang.String" order="BEFORE">
-            SELECT UUID()
+            REPLACE(UUID(),'-','')
         </selectKey>
         INSERT into point_log(id, owner_id, variance, created_at)
         VALUES (#{id}, #{ownerId}, #{variance}, NOW())

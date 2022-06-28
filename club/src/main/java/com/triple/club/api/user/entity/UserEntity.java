@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Getter
@@ -16,7 +18,8 @@ import java.util.Date;
 public class UserEntity {
     private String id;
 
-    @NotBlank
+    @NotNull
+    @Size(min = 1, max = 20)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -10,7 +10,7 @@
 
     <insert id="save" keyColumn="id" keyProperty="id" parameterType="com.triple.club.api.file.entity.FileEntity">
         <selectKey keyProperty="id" keyColumn="id" order="BEFORE" resultType="java.lang.String">
-            SELECT UUID()
+            REPLACE(UUID(),'-','')
         </selectKey>
         INSERT INTO file(id, owner_id, url, content_type, created_at, updated_at)
         VALUES (#{id}, #{ownerId}, #{url}, #{contentType}, NOW(), NOW())
