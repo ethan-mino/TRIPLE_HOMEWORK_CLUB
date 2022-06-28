@@ -6,7 +6,7 @@ Triple Open Recruitment Assignment
   클럽 마일리지 서비스 ERD
 </p>
 <p align = "center">
-  <img src= "https://user-images.githubusercontent.com/53431518/176169705-66d52a9c-8e39-4347-badd-b21e848b7bbd.png](https://user-images.githubusercontent.com/53431518/176205508-cb133d64-7501-466b-b422-6e5bb1cb3dbe.png"></img>
+  <img src= "https://user-images.githubusercontent.com/53431518/176205951-11c3d86b-b0f1-4837-8e31-2d5723b82223.png"></img>
   Point Logic Flow Chart
 </p>
 
