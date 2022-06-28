@@ -16,7 +16,7 @@ public interface ReviewMapper {
     Integer findPointByUserId(String userId);
     int save(ReviewEntity review);
 
-    int updatePointById(String id, int updatedPoint);
+    int updatePointById(String id, int variance);
     int updateById(ReviewEntity review);
     int updateReviewPointByOwnerId(String ownerId, int variance);
     int deleteById(String id);

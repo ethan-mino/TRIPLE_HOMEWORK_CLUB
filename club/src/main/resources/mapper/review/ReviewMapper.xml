@@ -22,21 +22,21 @@
     <select id="findById" resultMap="ReviewDetails">
         SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
                review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
-        FROM review JOIN review_image ON review.id = review_image.review_id
+        FROM review LEFT OUTER JOIN review_image ON review.id = review_image.review_id
         WHERE review.id = #{id}
     </select>
 
     <select id="findByWriterId" resultMap="ReviewDetails">
         SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
                review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
-        FROM review JOIN review_image ON review.id = review_image.review_id
+        FROM review LEFT OUTER JOIN review_image ON review.id = review_image.review_id
         WHERE review.writer_id = #{writerId}
     </select>
 
     <select id="findByPlaceId" resultMap="ReviewDetails">
         SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
                review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
-        FROM review JOIN review_image ON review.id = review_image.review_id
+        FROM review LEFT OUTER JOIN review_image ON review.id = review_image.review_id
         WHERE review.place_id = #{placeId}
     </select>
 
@@ -63,7 +63,7 @@
     <select id="findFirstReviewByPlaceId" resultMap="ReviewDetails">
         SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
                review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
-        FROM review JOIN review_image ON review.id = review_image.review_id
+        FROM review LEFT OUTER JOIN review_image ON review.id = review_image.review_id
         WHERE place_id = #{placeId}
         ORDER BY created_at ASC LIMIT 1
     </select>
@@ -76,7 +76,7 @@
 
     <update id="updatePointById">
         UPDATE review
-        SET point = #{updatedPoint}
+        SET point = point + #{variance}
         WHERE id = #{id}
     </update>
 
