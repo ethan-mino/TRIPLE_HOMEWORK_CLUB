@@ -54,3 +54,21 @@ CREATE TABLE review_image(
     FOREIGN KEY (image_file_id) REFERENCES file(id) ON DELETE CASCADE,
     FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE review_point(
+     id VARCHAR(255) NOT NULL COMMENT '리뷰 포인트 아이디',
+     owner_id VARCHAR(255) NOT NULL COMMENT '소유자 아이디',
+     point INTEGER NOT NULL COMMENT '유저 포인트',
+     PRIMARY KEY (id),
+     UNIQUE KEY (owner_id),
+     FOREIGN KEY (owner_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE point_log(
+    id VARCHAR(255) NOT NULL COMMENT '로그 아이디',
+    owner_id VARCHAR(255) NOT NULL COMMENT '유저 아이디',
+    variance INTEGER NOT NULL COMMENT '포인트 변동',
+    created_at DATETIME NOT NULL COMMENT '생성 일자',
+    PRIMARY KEY (id),
+    FOREIGN KEY (owner_id) REFERENCES user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
