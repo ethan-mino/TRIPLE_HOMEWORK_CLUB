@@ -26,6 +26,14 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    @GetMapping("points/my-point")  // 유저의 리뷰 포인트 조회
+    public ResponseEntity<ApiInfoResponse<Integer>> getUserPoints(@AuthenticationPrincipal CustomUserDetails user){
+        ApiInfoResponse<Integer> apiResponse = new ApiInfoResponse<>();
+        int point = reviewService.findPointByUserId(user.getId());
+        apiResponse.setData(point);
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @GetMapping("/{placeId}") // 특정 장소의 리뷰 조회
     public ResponseEntity<ApiInfoResponse<List<ReviewDetails>>> getReviewByPlaceId(@PathVariable("placeId") String placeId){
         ApiInfoResponse<List<ReviewDetails>> apiResponse = new ApiInfoResponse<>();

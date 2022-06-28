@@ -59,4 +59,41 @@
         FROM review
         WHERE id = #{id}
     </delete>
+
+    <select id="findFirstReviewByPlaceId" resultMap="ReviewDetails">
+        SELECT review.id, review.place_id, review.writer_id, review.content, review.point, review.created_at, review.updated_at,
+               review_image.id as review_image_id, review_image.image_file_id, review_image.review_id
+        FROM review JOIN review_image ON review.id = review_image.review_id
+        WHERE place_id = #{placeId}
+        ORDER BY created_at ASC LIMIT 1
+    </select>
+
+    <select id="findPointByUserId" resultType="Integer">
+        SELECT point
+        FROM review_point
+        WHERE owner_id = #{id}
+    </select>
+
+    <update id="updatePointById">
+        UPDATE review
+        SET point = #{updatedPoint}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="updateReviewPointByOwnerId">
+        <selectKey keyColumn="id" keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            SELECT UUID()
+        </selectKey>
+        INSERT INTO review_point(id, owner_id, point)
+        VALUES (#{id}, #{ownerId}, #{variance})
+        ON DUPLICATE KEY UPDATE point = point + #{variance}
+    </insert>
+
+    <insert id="saveLog" parameterType="com.triple.club.api.review.entity.PointLog">
+        <selectKey keyProperty="id" keyColumn="id" resultType="java.lang.String" order="BEFORE">
+            SELECT UUID()
+        </selectKey>
+        INSERT into point_log(id, owner_id, variance, created_at)
+        VALUES (#{id}, #{ownerId}, #{variance}, NOW())
+    </insert>
 </mapper>

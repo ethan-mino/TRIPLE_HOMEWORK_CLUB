@@ -1,22 +1,17 @@
 package com.triple.club.api.review.service;
 
-import com.triple.club.api.exception.FailToEarnPointException;
-import com.triple.club.api.exception.TransactionFailureException;
-import com.triple.club.api.file.service.FileService;
 import com.triple.club.api.file.entity.FileEntity;
-import com.triple.club.api.review.EarnPointAction;
-import com.triple.club.api.review.dto.EarnPointRequest;
+import com.triple.club.api.file.service.FileService;
+import com.triple.club.api.review.dto.PointVariance;
 import com.triple.club.api.review.dto.ReviewDetails;
-import com.triple.club.api.review.mapper.ReviewImageMapper;
-import com.triple.club.api.review.mapper.ReviewMapper;
+import com.triple.club.api.review.entity.PointLog;
 import com.triple.club.api.review.entity.ReviewEntity;
 import com.triple.club.api.review.entity.ReviewImageEntity;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.*;
+import com.triple.club.api.review.mapper.ReviewImageMapper;
+import com.triple.club.api.review.mapper.ReviewMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,8 +21,6 @@ public class ReviewService {
     private final FileService fileService;
     private final ReviewMapper reviewMapper;
     private final ReviewImageMapper reviewImageMapper;
-    private final String POINT_EARN_TYPE = "REVIEW";
-    private final String POINT_EARN_URL = "http://localhost:3030/events";
 
     public ReviewService(ReviewMapper reviewMapper,
                          FileService fileService,
@@ -37,35 +30,30 @@ public class ReviewService {
         this.reviewImageMapper = reviewImageMapper;
     }
 
-    private void pointEarn(ReviewDetails review, HttpMethod method, EarnPointAction action){
-        ModelMapper modelMapper = new ModelMapper();
-        EarnPointRequest pointRequest = modelMapper.map(review, EarnPointRequest.class);
-        pointRequest.setUserId(review.getWriterId());
-        pointRequest.setAction(action);
-        pointRequest.setType(POINT_EARN_TYPE);
+    private int calReviewPoint(ReviewDetails review){
+        String reviewId = review.getId();    // 대상 리뷰의 id
+        String placeId = review.getPlaceId();
 
-        RestTemplate rt = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<Object> entity = new HttpEntity<>(pointRequest, headers);
-
-        try{
-            ResponseEntity<String> pointResponse = rt.exchange( // 포인트 적립 API에 request
-                    POINT_EARN_URL, method,
-                    entity, String.class
-            );
-
-            int statusCode = pointResponse.getStatusCodeValue();
-
-            if(statusCode != HttpStatus.OK.value()  // 포인트 적립에 실패한 경우
-                    && statusCode != HttpStatus.CREATED.value()
-                    && statusCode == HttpStatus.NO_CONTENT.value()){
-                throw new FailToEarnPointException();
-            }
-        }catch (Exception ex){
-            ex.printStackTrace();
-            throw new FailToEarnPointException();
-
+        int pointVariance = 0;  // 변동된 포인트
+        ReviewEntity firstReview = reviewMapper.findFirstReviewByPlaceId(placeId); // 해당 장소의 첫 리뷰 확인
+        if(review.getContent().trim().length() > 0){    // 1자 이상 텍스트를 작성한 경우 (양쪽 공백 제외)
+            pointVariance++;
         }
+        if(review.getAttachedPhotoIds().size() > 0){    // 1장 이상 사진 첨부한 경우
+            pointVariance++;
+        }
+        if(firstReview != null && reviewId.equals(firstReview.getId())){    // 리뷰가 해당 장소의 첫 리뷰인 경우
+            pointVariance++;
+        }
+
+        return pointVariance;
+    }
+
+    @Transactional(readOnly = true)
+    public Integer findPointByUserId(String userId){
+        Integer point = reviewMapper.findPointByUserId(userId);
+        if(point == null) point = 0;
+        return point;
     }
 
     @Transactional(readOnly = true)
@@ -100,12 +88,9 @@ public class ReviewService {
                 reviewImageMapper.save(reviewImage);    // 리뷰 이미지 정보 저장
             }
             ReviewDetails reviewDetails = findById(reviewId);
-            try{
-                pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.ADD); // 포인트 적립
-            }catch (FailToEarnPointException ex){
-                ex.printStackTrace();
-                throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
-            }
+            int newPoint = calReviewPoint(reviewDetails);
+            PointVariance pointVariance = new PointVariance(ownerId, reviewId, newPoint);
+            updatePoint(pointVariance); // 포인트 변경
         }
 
         return createCnt;   // 리뷰 정보를 생성한 개수 반환
@@ -115,10 +100,12 @@ public class ReviewService {
     public int updateById(ReviewEntity review,
                           List<MultipartFile> reviewImages) throws TransactionException {
 
+        String reviewId = review.getId();   // 리뷰 아이디
+        ReviewDetails BeforeUpdateReview = findById(reviewId);  // 업데이트 전 리뷰
+
         int updateCnt = reviewMapper.updateById(review);  // 리뷰 정보 저장
         if(updateCnt == 1){
             String ownerId = review.getWriterId();  // 리뷰 작성자 id
-            String reviewId = review.getId();   // 리뷰 아이디
             List<FileEntity> reviewFileList = fileService.saveFiles(reviewImages, ownerId); // 이미지 파일을 물리적으로 저장
 
             reviewImageMapper.deleteByReviewId(reviewId);   // 해당 리뷰의 이미지 정보 제거
@@ -130,28 +117,56 @@ public class ReviewService {
                 reviewImageMapper.save(reviewImage);    // 리뷰 이미지 정보 저장
             }
 
-            ReviewDetails reviewDetails = findById(reviewId);
-            try{
-                pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.MOD); // 포인트 적립
-            }catch (FailToEarnPointException ex){
-                throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
-            }
+            ReviewDetails updatedReview = findById(reviewId);
+            int prePoint = calReviewPoint(BeforeUpdateReview);
+            int postPoint = calReviewPoint(updatedReview);
+            int variance = postPoint - prePoint;    // 포인트 증감
+
+            PointVariance pointVariance = new PointVariance(ownerId, reviewId, variance);
+            updatePoint(pointVariance);
         }
         return updateCnt;   // 리뷰 정보를 수정한 개수 반환
     }
 
     @Transactional(readOnly = false)
     public int deleteById(String id){
-        ReviewDetails reviewDetails = findById(id);
+        ReviewDetails review = findById(id);
+        String writerId = review.getWriterId();
+        String placeId = review.getPlaceId();
+
+        int prePoint = calReviewPoint(review);  // 지워진 리뷰의 포인트
+        int variance = prePoint * -1;   // 포인트 증감
 
         int deleteCnt = reviewMapper.deleteById(id);
+        PointVariance pointVar = new PointVariance(writerId, id, variance);
+        updatePoint(pointVar);  // 해당 리뷰의 포인트 변경
 
-        try{
-            pointEarn(reviewDetails, HttpMethod.POST, EarnPointAction.DELETE); // 포인트 적립
-        }catch (FailToEarnPointException ex){
-            throw new TransactionFailureException(null);   // 포인트 적립에 실패한 경우 throw SQLException
+        ReviewDetails firstReview = reviewMapper.findFirstReviewByPlaceId(placeId); // 리뷰를 지운 후, 해당 장소의 첫번째 리뷰
+        if(firstReview != null){    // 리뷰를 지우고 난 후, 해당 장소에 작성된 리뷰가 존재한다면,
+            int firstReviewPoint = calReviewPoint(firstReview);
+
+            PointVariance firstReviewPointVar = new PointVariance(firstReview.getWriterId(),
+                    firstReview.getId(), firstReviewPoint);
+            updatePoint(firstReviewPointVar); // 포인트 변경
         }
 
         return deleteCnt;
+    }
+
+    @Transactional(readOnly = false)
+    public int updatePoint(PointVariance pointVar){ // 리뷰와 유저의 포인트를 변경, 증감 이력 저장
+        int variance = pointVar.getVariance();
+        String ownerId = pointVar.getUserId();
+        String reviewId = pointVar.getReviewId();
+
+        int updateCnt = reviewMapper.updateReviewPointByOwnerId(ownerId, variance); // 유저의 누적 포인트 변경
+        reviewMapper.updatePointById(reviewId, variance);   // 리뷰의 포인트 변경
+        PointLog pointLog = PointLog.builder()
+                .ownerId(ownerId)
+                .variance(variance)
+                .build();
+
+        reviewMapper.saveLog(pointLog); // 포인트 증감 이력 저장
+        return updateCnt;
     }
 }
