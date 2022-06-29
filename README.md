@@ -12,7 +12,7 @@ Triple Open Recruitment Assignment
 
 ## 📃 Document
 * 접속하실 수 없으시면, 초대해 드리겠습니다!
-* API 명세 [Postman](https://cloudy-comet-98520.postman.co/workspace/My-Workspace~e5f512fc-bd24-413a-89a3-aa73b3a0ae7d/documentation/17630551-b8fe4125-6f18-409f-a7cb-ac43f24b8781)
+* API 명세 [Postman](https://www.postman.com/cloudy-comet-98520/workspace/public-workspace/documentation/17630551-b8fe4125-6f18-409f-a7cb-ac43f24b8781)
 
 ## 💻 API 
     User
